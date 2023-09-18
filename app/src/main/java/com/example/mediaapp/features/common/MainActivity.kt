@@ -1,4 +1,4 @@
-package com.example.mediaapp
+package com.example.mediaapp.features.common
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,6 +6,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.mediaapp.R
 import com.example.mediaapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.imageFragment,  R.id.videoFragment
+                R.id.imageFragment, R.id.videoFragment
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
