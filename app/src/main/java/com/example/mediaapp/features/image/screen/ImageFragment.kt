@@ -9,22 +9,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.mediaapp.databinding.FragmentImageBinding
-import com.example.mediaapp.features.image.repository.ImageRepository
-import com.example.mediaapp.features.video.repository.VideoRepository
 import com.example.mediaapp.features.image.screen.adapter.ImageAdapter
 import com.example.mediaapp.features.image.viewModel.ImageViewModel
-import com.example.mediaapp.features.image.viewModel.ImageViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class ImageFragment : Fragment() {
 
     private lateinit var binding: FragmentImageBinding
     private var adapter:ImageAdapter = ImageAdapter()
-    private val viewModel: ImageViewModel by viewModels {
-        ImageViewModelFactory(ImageRepository(requireContext()))
-    }
+    private val viewModel: ImageViewModel by  viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

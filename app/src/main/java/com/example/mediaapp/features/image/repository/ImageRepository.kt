@@ -1,14 +1,14 @@
 package com.example.mediaapp.features.image.repository
 
-import android.content.Context
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import com.example.mediaapp.features.image.dataModel.Image
-import com.example.mediaapp.features.image.dataSource.ImagePagingSource
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ImageRepository(private val context: Context) {
+class ImageRepository @Inject constructor(private val imageDataSource: PagingSource<Int, Image>) {
     fun getPagingData(): Flow<PagingData<Image>> {
         val pagingConfig = PagingConfig(
             pageSize = 20,
@@ -18,7 +18,7 @@ class ImageRepository(private val context: Context) {
 
         val pager = Pager(
             config = pagingConfig,
-            pagingSourceFactory = { ImagePagingSource(context) }
+            pagingSourceFactory = { imageDataSource}
         )
 
         return pager.flow

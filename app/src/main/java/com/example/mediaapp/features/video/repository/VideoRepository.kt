@@ -1,14 +1,14 @@
 package com.example.mediaapp.features.video.repository
 
-import android.content.Context
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import com.example.mediaapp.features.video.dataModel.Video
-import com.example.mediaapp.features.video.dataSource.VideoPagingSource
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class VideoRepository(private val context: Context) {
+class VideoRepository @Inject constructor(private val videoDataSource: PagingSource<Int, Video>){
     fun getPagingData(): Flow<PagingData<Video>> {
         val pagingConfig = PagingConfig(
             pageSize = 20,
@@ -18,7 +18,7 @@ class VideoRepository(private val context: Context) {
 
         val pager = Pager(
             config = pagingConfig,
-            pagingSourceFactory = { VideoPagingSource(context) }
+            pagingSourceFactory = { videoDataSource}
         )
 
         return pager.flow

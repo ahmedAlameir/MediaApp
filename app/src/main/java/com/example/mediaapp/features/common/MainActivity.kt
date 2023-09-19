@@ -16,7 +16,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.mediaapp.R
 import com.example.mediaapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val REQUEST_CODE_PERMISSIONS = 123 // Any unique request code
 

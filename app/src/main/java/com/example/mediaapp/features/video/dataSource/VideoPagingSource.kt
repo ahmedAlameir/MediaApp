@@ -9,9 +9,10 @@ import android.provider.MediaStore
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.mediaapp.features.video.dataModel.Video
+import javax.inject.Inject
 
 
-class VideoPagingSource(private val context: Context) : PagingSource<Int, Video>() {
+class VideoPagingSource@Inject constructor(private val context: Context) : PagingSource<Int, Video>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Video> {
         try {

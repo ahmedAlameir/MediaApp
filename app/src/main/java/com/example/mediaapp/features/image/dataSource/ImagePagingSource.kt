@@ -6,13 +6,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.mediaapp.features.image.dataModel.Image
+import javax.inject.Inject
 
 
-class ImagePagingSource(private val context: Context) : PagingSource<Int, Image>() {
+class ImagePagingSource @Inject constructor(private val context: Context) : PagingSource<Int, Image>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Image> {
         try {

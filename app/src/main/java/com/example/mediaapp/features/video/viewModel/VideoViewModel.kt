@@ -4,16 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.mediaapp.features.image.dataModel.Image
 import com.example.mediaapp.features.video.dataModel.Video
 import com.example.mediaapp.features.video.repository.VideoRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
-class VideoViewModel(private val repository: VideoRepository) : ViewModel() {
+import javax.inject.Inject
+@HiltViewModel
+class VideoViewModel @Inject constructor(private val repository: VideoRepository) : ViewModel() {
 
     private val _videoLoadingStateFlow = MutableStateFlow<PagingData<Video>>(PagingData.empty())
     val videoLoadingStateFlow: StateFlow<PagingData<Video>> = _videoLoadingStateFlow
