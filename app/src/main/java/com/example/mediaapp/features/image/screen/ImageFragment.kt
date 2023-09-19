@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.mediaapp.databinding.FragmentImageBinding
 import com.example.mediaapp.features.image.repository.ImageRepository
+import com.example.mediaapp.features.video.repository.VideoRepository
 import com.example.mediaapp.features.image.screen.adapter.ImageAdapter
 import com.example.mediaapp.features.image.viewModel.ImageViewModel
 import com.example.mediaapp.features.image.viewModel.ImageViewModelFactory

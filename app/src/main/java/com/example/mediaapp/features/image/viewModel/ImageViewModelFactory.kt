@@ -2,8 +2,9 @@ package com.example.mediaapp.features.image.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.mediaapp.features.image.repository.ImageRepository
+import com.example.mediaapp.features.video.repository.VideoRepository
+import com.example.mediaapp.features.video.viewModel.VideoViewModel
 
 
 class ImageViewModelFactory(private val repository: ImageRepository) : ViewModelProvider.Factory {
