@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.mediaapp.features.common.state.LoadingState
 import com.example.mediaapp.features.image.dataModel.Image
 import com.example.mediaapp.features.image.repository.ImageRepository
 import kotlinx.coroutines.flow.Flow
@@ -15,8 +14,8 @@ import kotlinx.coroutines.launch
 
 class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
 
-    private val _imageLoadingStateFlow = MutableStateFlow<LoadingState<Image>>(LoadingState.Loading)
-    val imageLoadingStateFlow: StateFlow<LoadingState<Image>> = _imageLoadingStateFlow
+    private val _imageLoadingStateFlow = MutableStateFlow<PagingData<Image>>(PagingData.empty())
+    val imageLoadingStateFlow: StateFlow<PagingData<Image>> = _imageLoadingStateFlow
 
     init {
         loadImages()
@@ -27,12 +26,11 @@ class ImageViewModel(private val repository: ImageRepository) : ViewModel() {
             val pagingDataFlow: Flow<PagingData<Image>> =
                 repository.getPagingData().cachedIn(viewModelScope)
             try {
-                _imageLoadingStateFlow.value = LoadingState.Loading
                 pagingDataFlow.collectLatest { pagingData ->
-                    _imageLoadingStateFlow.value = LoadingState.Success(pagingData)
+                    _imageLoadingStateFlow.value =pagingData
                 }
             } catch (e: Exception) {
-                _imageLoadingStateFlow.value = LoadingState.Error(e)
+               // _imageLoadingStateFlow.value = LoadingState.Error(e)
             }
         }
     }
