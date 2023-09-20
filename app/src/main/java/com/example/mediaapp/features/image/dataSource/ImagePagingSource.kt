@@ -89,11 +89,8 @@ class ImagePagingSource @Inject constructor(private val context: Context) : Pagi
 
             while (it.moveToNext()) {
                 val id = it.getLong(idColumn)
-
-
                 val contentUri = Uri.withAppendedPath(queryUri, id.toString())
                 images.add(Image(id, contentUri.toString()))
-                Log.i("TAG", contentUri.toString())
             }
         }
         cursor?.close()

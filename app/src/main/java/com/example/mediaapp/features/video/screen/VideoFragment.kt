@@ -45,6 +45,13 @@ class VideoFragment : Fragment() {
             }
 
         }
+        adapter.addLoadStateListener { loadState ->
+
+            if ( loadState.append.endOfPaginationReached )
+            {
+                binding.emptyStateTextView.isVisible = adapter.itemCount < 1
+            }
+        }
         return binding.root
     }
     override fun onConfigurationChanged(newConfig: Configuration) {

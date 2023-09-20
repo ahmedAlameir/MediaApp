@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -33,15 +34,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val permissionsToRequest = ArrayList<String>()
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.READ_EXTERNAL_STORAGE,
-            )
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            permissionsToRequest.add(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-            )
-        }
+
         permissionsToRequest.add(Manifest.permission.READ_EXTERNAL_STORAGE)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             for (permission in requiredPermissions) {
@@ -50,28 +43,35 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     permissionsToRequest.add(permission)
                 }
-                else{
-                    Log.i("TAG", permission)
-                }
+
+            }
+        }else{
+            if (ContextCompat.checkSelfPermission(
+                    this, Manifest.permission.READ_EXTERNAL_STORAGE,
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                permissionsToRequest.add(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                )
             }
         }
 
-        // Request permissions if any are not granted
         if (permissionsToRequest.isNotEmpty()) {
             ActivityCompat.requestPermissions(
                 this,
                 permissionsToRequest.toTypedArray(), REQUEST_CODE_PERMISSIONS
             )
-        } else {
-            // All permissions are already granted
+        } else{
+            Toast.makeText(applicationContext, "please allow permission", Toast.LENGTH_SHORT).show();
+
         }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.imageFragment, R.id.videoFragment
@@ -81,18 +81,5 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, you can proceed with your code
-            } else {
-                // Permission denied, handle accordingly (e.g., show a message to the user)
-            }
-        }
-    }
+
 }
