@@ -28,12 +28,8 @@ class ImageViewModel @Inject constructor(private val repository: ImageRepository
         viewModelScope.launch {
             val pagingDataFlow: Flow<PagingData<Image>> =
                 repository.getPagingData().cachedIn(viewModelScope)
-            try {
-                pagingDataFlow.collectLatest { pagingData ->
-                    _imageLoadingStateFlow.value =pagingData
-                }
-            } catch (e: Exception) {
-               // _imageLoadingStateFlow.value = LoadingState.Error(e)
+            pagingDataFlow.collectLatest { pagingData ->
+                _imageLoadingStateFlow.value = pagingData
             }
         }
     }

@@ -27,12 +27,10 @@ class VideoViewModel @Inject constructor(private val repository: VideoRepository
         viewModelScope.launch {
             val pagingDataFlow: Flow<PagingData<Video>> =
                 repository.getPagingData().cachedIn(viewModelScope)
-            try {
-                pagingDataFlow.collectLatest { pagingData ->
-                    _videoLoadingStateFlow.value =pagingData
-                }
-            } catch (e: Exception) {
-               // _imageLoadingStateFlow.value = LoadingState.Error(e)
+
+            pagingDataFlow.collectLatest { pagingData ->
+                _videoLoadingStateFlow.value = pagingData
+
             }
         }
     }

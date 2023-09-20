@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.mediaapp.databinding.FragmentImageBinding
 import com.example.mediaapp.features.image.screen.adapter.ImageAdapter
@@ -30,11 +32,13 @@ class ImageFragment : Fragment() {
         binding = FragmentImageBinding.inflate(layoutInflater,container,false)
         binding.recyclerView.layoutManager =  GridLayoutManager(requireContext(), 2)
         binding.recyclerView.adapter = adapter
-        viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.imageLoadingStateFlow.collectLatest { loadingState ->
-                    adapter.submitData(viewLifecycleOwner.lifecycle,loadingState)
 
-                }
+        lifecycleScope.launch {
+            viewModel.imageLoadingStateFlow.collectLatest { loadingState ->
+                adapter.submitData(viewLifecycleOwner.lifecycle, loadingState)
+
+            }
+
         }
         return binding.root
     }

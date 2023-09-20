@@ -32,11 +32,8 @@ class VideoAdapter : PagingDataAdapter<Video, VideoAdapter.VideoViewHolder>(Vide
     inner class VideoViewHolder(private val binding: VideoItemBinding) :  RecyclerView.ViewHolder(binding.root) {
 
         fun bind(video: Video) {
-            // Load the image using Picasso or your preferred image-loading library
-            Glide.with(itemView)
-                .load(video.thumbnailUri)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(binding.roundedImageView)
+            binding.imageUri = video.thumbnailUri
+
         }
     }
 

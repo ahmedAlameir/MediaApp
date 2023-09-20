@@ -16,16 +16,16 @@ class ImagePagingSource @Inject constructor(private val context: Context) : Pagi
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Image> {
         try {
-            val startPosition = params.key ?: 0
+            val page = params.key ?: 0
             val pageSize = params.loadSize
 
-            val images = loadImages(startPosition, pageSize)
+            val images = loadImages(page, pageSize)
 
-            val nextKey = if (images.isEmpty()) null else startPosition + pageSize
+            val nextKey = if (images.isEmpty()) null else page + pageSize
 
             return LoadResult.Page(
                 data = images,
-                prevKey = null,
+                prevKey = if (page == 0) null else page-pageSize,
                 nextKey = nextKey
             )
         } catch (e: Exception) {
@@ -34,8 +34,10 @@ class ImagePagingSource @Inject constructor(private val context: Context) : Pagi
     }
 
     override fun getRefreshKey(state: PagingState<Int, Image>): Int? {
-        // Define logic for refreshing data, if needed
-        return null
+        return state.anchorPosition?.let { anchorPosition ->
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(20)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(20)
+        }
     }
 
     private fun loadImages(startPosition: Int, pageSize: Int): List<Image> {

@@ -1,4 +1,5 @@
 package com.example.mediaapp.features.video.dataSource
+
 import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
@@ -12,20 +13,21 @@ import com.example.mediaapp.features.video.dataModel.Video
 import javax.inject.Inject
 
 
-class VideoPagingSource@Inject constructor(private val context: Context) : PagingSource<Int, Video>() {
+class VideoPagingSource @Inject constructor(private val context: Context) :
+    PagingSource<Int, Video>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Video> {
         try {
-            val startPosition = params.key ?: 0
+            val page = params.key ?: 0
             val pageSize = params.loadSize
 
-            val videos = loadVideos(startPosition, pageSize)
+            val videos = loadVideos(page, pageSize)
 
-            val nextKey = if (videos.isEmpty()) null else startPosition + pageSize
+            val nextKey = if (videos.isEmpty()) null else page + pageSize
 
             return LoadResult.Page(
                 data = videos,
-                prevKey = null,
+                prevKey = if (page == 0) null else page-pageSize,
                 nextKey = nextKey
             )
         } catch (e: Exception) {
@@ -34,8 +36,10 @@ class VideoPagingSource@Inject constructor(private val context: Context) : Pagin
     }
 
     override fun getRefreshKey(state: PagingState<Int, Video>): Int? {
-        // Define logic for refreshing data, if needed
-        return null
+        return state.anchorPosition?.let { anchorPosition ->
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+        }
     }
 
     private fun loadVideos(startPosition: Int, pageSize: Int): List<Video> {
@@ -46,10 +50,10 @@ class VideoPagingSource@Inject constructor(private val context: Context) : Pagin
             MediaStore.Video.Media.DATA
         )
 
-        val sortOrder = "${MediaStore.Video.Media.DATE_ADDED} DESC LIMIT $pageSize OFFSET $pageSize  "
+        val sortOrder =
+            "${MediaStore.Video.Media.DATE_ADDED} DESC LIMIT $pageSize OFFSET $pageSize  "
 
         val queryUri: Uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI
-
 
 
         val cursor: Cursor? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -88,7 +92,7 @@ class VideoPagingSource@Inject constructor(private val context: Context) : Pagin
             while (it.moveToNext()) {
                 val videoId = it.getLong(idColumn)
                 val contentUri = Uri.withAppendedPath(queryUri, videoId.toString())
-                videos.add(Video(videoId,contentUri))
+                videos.add(Video(videoId, contentUri))
             }
         }
         cursor?.close()

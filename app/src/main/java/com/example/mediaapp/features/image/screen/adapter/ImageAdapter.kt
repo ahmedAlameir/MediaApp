@@ -31,11 +31,8 @@ class ImageAdapter : PagingDataAdapter<Image, ImageAdapter.ImageViewHolder>(IMAG
     inner class ImageViewHolder(private val binding: ImageItemBinding) :  RecyclerView.ViewHolder(binding.root) {
 
         fun bind(image: Image) {
-            // Load the image using Picasso or your preferred image-loading library
-            Glide.with(itemView)
-                .load(image.contentUri)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(binding.roundedImageView)
+            binding.imageUri = image.contentUri
+
         }
     }
 
