@@ -1,11 +1,14 @@
 package com.example.mediaapp.features.image.screen
 
+import android.Manifest
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -34,10 +37,23 @@ class ImageFragment : Fragment() {
         gridLayoutManager =  GridLayoutManager(requireContext(), calculateSpanCount())
         binding.recyclerView.layoutManager = gridLayoutManager
         binding.recyclerView.adapter = adapter
-        lifecycleScope.launch {
-            viewModel.imageLoadingStateFlow.collectLatest { loadingState ->
-                adapter.submitData(viewLifecycleOwner.lifecycle, loadingState)
+        val requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                lifecycleScope.launch {
+                    viewModel.imageLoadingStateFlow.collectLatest { loadingState ->
+                        adapter.submitData(viewLifecycleOwner.lifecycle, loadingState)
+                    }
+                }
             }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+            requestPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
+        }else{
+            requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+
         }
         adapter.addLoadStateListener { loadState ->
 
@@ -61,5 +77,7 @@ class ImageFragment : Fragment() {
             2
         }
     }
+
+
 
 }

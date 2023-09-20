@@ -80,6 +80,22 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+         permissions: Array<String>,
+         grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission was granted; you can now perform the action that requires this permission.
+                // For example, open the camera.
+            } else {
+                // Permission was denied. You may want to inform the user or handle it gracefully.
+            }
+        }
+    }
 
 
 }

@@ -36,8 +36,8 @@ class ImagePagingSource @Inject constructor(private val context: Context) : Pagi
 
     override fun getRefreshKey(state: PagingState<Int, Image>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(20)
-                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(20)
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
 
@@ -48,7 +48,8 @@ class ImagePagingSource @Inject constructor(private val context: Context) : Pagi
             MediaStore.Images.Media._ID,
         )
 
-        val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC LIMIT $pageSize  OFFSET $pageSize "
+        val sortOrder =
+            "${MediaStore.Images.Media.DATE_ADDED} DESC LIMIT $pageSize OFFSET $pageSize  "
 
         val queryUri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
