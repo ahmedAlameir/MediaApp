@@ -7,9 +7,11 @@ import androidx.paging.PagingSource
 import com.example.mediaapp.features.image.dataModel.Image
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
-
-class ImageRepository @Inject constructor(private val imageDataSource: PagingSource<Int, Image>) {
-    fun getPagingData(): Flow<PagingData<Image>> {
+interface ImageRepositoryInterface {
+    fun getPagingData(): Flow<PagingData<Image>>
+}
+class ImageRepository @Inject constructor(private val imageDataSource: PagingSource<Int, Image>):ImageRepositoryInterface {
+    override fun getPagingData(): Flow<PagingData<Image>> {
         val pagingConfig = PagingConfig(
             pageSize = 20,
             prefetchDistance = 10,

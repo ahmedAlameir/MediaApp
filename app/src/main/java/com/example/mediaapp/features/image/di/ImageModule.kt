@@ -5,6 +5,7 @@ import androidx.paging.PagingSource
 import com.example.mediaapp.features.image.dataModel.Image
 import com.example.mediaapp.features.image.dataSource.ImagePagingSource
 import com.example.mediaapp.features.image.repository.ImageRepository
+import com.example.mediaapp.features.image.repository.ImageRepositoryInterface
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +16,7 @@ import dagger.hilt.components.SingletonComponent
 object ImageModule {
 
     @Provides
-    fun provideImageRepository(imageDataSource: ImagePagingSource): ImageRepository {
+    fun provideImageRepository(imageDataSource: ImagePagingSource): ImageRepositoryInterface {
         return ImageRepository(imageDataSource)
     }
     @Provides

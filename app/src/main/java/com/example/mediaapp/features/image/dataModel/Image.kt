@@ -4,5 +4,5 @@ import android.net.Uri
 
 data class Image(
     val id: Long,
-    val contentUri: Uri,
+    val contentUri: String,
 )

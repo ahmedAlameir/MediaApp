@@ -1,5 +1,6 @@
 package com.example.mediaapp.features.video.screen
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -24,6 +25,7 @@ class VideoFragment : Fragment() {
     private lateinit var binding: FragmentVideoBinding
     private var adapter: VideoAdapter = VideoAdapter()
     private val viewModel: VideoViewModel by viewModels()
+    private lateinit var gridLayoutManager: GridLayoutManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,7 +33,8 @@ class VideoFragment : Fragment() {
     ): View {
 
         binding = FragmentVideoBinding.inflate(layoutInflater,container,false)
-        binding.recyclerView.layoutManager =  GridLayoutManager(requireContext(), 2)
+        gridLayoutManager =  GridLayoutManager(requireContext(), calculateSpanCount())
+        binding.recyclerView.layoutManager =  gridLayoutManager
         binding.recyclerView.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.videoLoadingStateFlow.collectLatest { loadingState ->
@@ -43,6 +46,19 @@ class VideoFragment : Fragment() {
 
         }
         return binding.root
+    }
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        gridLayoutManager.spanCount = calculateSpanCount()
+    }
+    private fun calculateSpanCount(): Int {
+        val orientation = resources.configuration.orientation
+        return if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            5
+        } else {
+            2
+        }
     }
 
 }

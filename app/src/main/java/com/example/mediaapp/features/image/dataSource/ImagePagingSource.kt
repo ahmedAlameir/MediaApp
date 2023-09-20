@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.mediaapp.features.image.dataModel.Image
@@ -91,7 +92,8 @@ class ImagePagingSource @Inject constructor(private val context: Context) : Pagi
 
 
                 val contentUri = Uri.withAppendedPath(queryUri, id.toString())
-                images.add(Image(id, contentUri))
+                images.add(Image(id, contentUri.toString()))
+                Log.i("TAG", contentUri.toString())
             }
         }
         cursor?.close()

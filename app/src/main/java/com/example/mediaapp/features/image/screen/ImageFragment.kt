@@ -1,5 +1,6 @@
 package com.example.mediaapp.features.image.screen
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,24 +24,35 @@ class ImageFragment : Fragment() {
     private lateinit var binding: FragmentImageBinding
     private var adapter:ImageAdapter = ImageAdapter()
     private val viewModel: ImageViewModel by  viewModels()
+    private lateinit var gridLayoutManager: GridLayoutManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentImageBinding.inflate(layoutInflater,container,false)
-        binding.recyclerView.layoutManager =  GridLayoutManager(requireContext(), 2)
+        gridLayoutManager =  GridLayoutManager(requireContext(), calculateSpanCount())
+        binding.recyclerView.layoutManager = gridLayoutManager
         binding.recyclerView.adapter = adapter
-
         lifecycleScope.launch {
             viewModel.imageLoadingStateFlow.collectLatest { loadingState ->
                 adapter.submitData(viewLifecycleOwner.lifecycle, loadingState)
-
             }
-
         }
         return binding.root
+    }
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        gridLayoutManager.spanCount = calculateSpanCount()
+    }
+
+    private fun calculateSpanCount(): Int {
+        val orientation = resources.configuration.orientation
+        return if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            5
+        } else {
+            2
+        }
     }
 
 }

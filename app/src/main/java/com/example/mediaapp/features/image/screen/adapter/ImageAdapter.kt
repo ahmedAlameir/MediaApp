@@ -1,5 +1,6 @@
 package com.example.mediaapp.features.image.screen.adapter
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +32,7 @@ class ImageAdapter : PagingDataAdapter<Image, ImageAdapter.ImageViewHolder>(IMAG
     inner class ImageViewHolder(private val binding: ImageItemBinding) :  RecyclerView.ViewHolder(binding.root) {
 
         fun bind(image: Image) {
-            binding.imageUri = image.contentUri
+            binding.imageUri =Uri.parse(image.contentUri)
 
         }
     }
